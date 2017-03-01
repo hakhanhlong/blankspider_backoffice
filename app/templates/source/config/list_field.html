@@ -1,6 +1,7 @@
 {% extends "_layoutmain.html"%}
 {% block title%}BLANKSPIDER - DASHBOARD{%endblock%}
 {%block js%}
+    <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
     <script type="text/javascript">
         function RemoveFieldConfig(sid, cid, rowid){
             var r = confirm("ARE YOU SURE REMOVE CONFIG FIELD!");

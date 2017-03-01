@@ -336,7 +336,7 @@ def config_field_add():
         end_pattern = request.form['end_pattern']
 
         try:
-            if c and c.config['PARSERFIELDS'][field_name]:
+            if c and c.config['PARSERFIELDS']['data'][field_name]:
                 is_update = True
         except:
             is_update = False
@@ -344,9 +344,9 @@ def config_field_add():
 
 
         if is_update:
-            key_number = len(c.config['PARSERFIELDS'][field_name]['step']) + 1
-            c.config['PARSERFIELDS'][field_name]['pattern_type'] = u'STRING_BETWEEN'
-            c.config['PARSERFIELDS'][field_name]['step'][str(key_number)] = dict(
+            key_number = len(c.config['PARSERFIELDS']['data'][field_name]['step']) + 1
+            c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
+            c.config['PARSERFIELDS']['data'][field_name]['step'][str(key_number)] = dict(
                     start_pattern=start_pattern,
                     end_pattern=end_pattern
                 )
@@ -370,7 +370,7 @@ def config_field_add():
 def config_field_list(sid):
     try:
         c = configuration_impl.get_config('SOURCE', sid)
-        list_field_config = c.config['PARSERFIELDS']
+        list_field_config = c.config['PARSERFIELDS']['data']
         return render_template('source/config/list_field.html', sid=sid, data=list_field_config)
     except Exception as ex:
         flash('#INFO: EMPTY LINK CONFIG')
@@ -386,8 +386,8 @@ def config_field_remove():
         ckey = request.form['cid']
         c = configuration_impl.get_config('SOURCE', sid)
         try:
-            if c.config['PARSERFIELDS'][ckey]:
-                del c.config['PARSERFIELDS'][ckey]
+            if c.config['PARSERFIELDS']['data'][ckey]:
+                del c.config['PARSERFIELDS']['data'][ckey]
                 if configuration_impl.update('SOURCE', sid, c.config):
                     return jsonify({'status': 1, 'message': 'Remove Config Field Successfull'})
         except Exception as error:
