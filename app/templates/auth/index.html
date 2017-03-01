@@ -1,0 +1,28 @@
+{% extends "_layoutlogin.html"%}
+{% block title %}BLANKSPIDER - LOGIN{% endblock %}
+{% block page_content%}
+    <div class="row">
+        <div class="page-header">
+            <h1>LOGIN MANAGEMENT</h1>
+        </div>
+        <div class="col-md-6">
+            <form action="{{url_for('auth.login')}}" method="post">
+
+                <div class="form-group">
+                    <label>Username</label>
+                    {{form['username'](class='form-control', placeholder='input your username ...')}}
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    {{form['password'](class='form-control', placeholder='input your password ...')}}
+                </div>
+                <div class="checkbox">
+                    <label>
+                        {{form['remember']()}} Remember
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+            </form>
+        </div>
+    </div>
+{%endblock%}

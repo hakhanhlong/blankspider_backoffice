@@ -1,0 +1,66 @@
+{% extends "_layoutmain.html"%}
+{% block title%}BLANKSPIDER - DASHBOARD{%endblock%}
+{%block page_content%}
+        <div class="row">
+            <div class="col-md-12">
+                 <h3 class="page-header">
+                     SOURCE MANAGEMENT
+                      <div class="pull-right">
+                        <a href="{{url_for('source.create')}}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ADD NEW SOURCE
+                        </a>
+                    </div>
+                 </h3>
+                 <ol class="breadcrumb">
+                  <li><a href="/">HOME</a></li>
+                  <li><a href="#" class="active">SOURCE</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row">
+             <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>NAME</th>
+                            <th>MODE</th>
+                            <th>ACTIVE</th>
+                            <th>STATUS</th>
+                            <th>PROJECT</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%if sources %}
+                            {%for source in sources%}
+                                <tr>
+                                    <td>{{loop.index}}</td>
+                                    <td><a href="{{url_for('source.edit', sid=source.id)}}"><strong>{{source.name}}</strong></a></td>
+                                    <td>{{source.mode}}</td>
+                                    <td>{{source.is_active}}</td>
+                                    <td>{{source.status}}</td>
+                                    <td>{{source.project_name}}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                          <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                             <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> CONFIGURATION
+                                            <span class="caret"></span>
+                                          </button>
+                                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                            <li><a href="{{url_for('source.config_general', sid=source.id)}}">GENERAL</a></li>
+                                            <li role="separator" class="divider"></li>
+                                            <li><a href="{{url_for('source.config_link_list', sid=source.id)}}">PARSER LINK</a></li>
+                                            <li><a href="{{url_for('source.config_field_list', sid=source.id)}}">FIELD PARSER</a></li>
+                                          </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {%endfor%}
+                        {%endif%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{%endblock%}

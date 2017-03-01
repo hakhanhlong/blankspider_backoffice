@@ -1,0 +1,10 @@
+Flask-Script
+flask-bootstrap
+Flask-Login
+flask-debugtoolbar
+flask-mongoengine
+flask-wtf
+Werkzeug
+flask-restful
+beautifulsoup4
+requests

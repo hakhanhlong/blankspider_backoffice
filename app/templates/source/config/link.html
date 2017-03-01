@@ -1,0 +1,221 @@
+{% extends "_layoutmain.html"%}
+{% block title%}BLANKSPIDER - SOURCE CONFIG LINK{%endblock%}
+
+{%block js%}
+    <script type="text/javascript">
+
+
+
+        $(document).ready(function(){
+
+            $('#btnGetLink').click(function(){
+
+
+
+                var beginURL = $('#txtBeginLink').val();
+                if(beginURL === ''){
+                     $('#modalInfo').modal('show')
+                     $('#modal-content').html("BEGIN URL DO NOT EMPTY!");
+                     return;
+                }
+
+
+
+
+                $.ajax({
+                    url: '{{url_for('source.config_link_extract_url')}}',
+                    data: $('#txtBeginLink').serialize(),
+                    type: 'POST',
+                    success: function(response) {
+                        $.each(response.links, function (index, value) {
+                            $('#list-url').append($('<option/>', {
+                                value: value,
+                                text : value
+                            }));
+                        });
+                        $("#list-url option").bind("dblclick", function(){
+                            $('#url_pattern').val($('#list-url option:selected').text());
+                        });
+                        $('#spanTotalLink').html(response.links.length);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+            });
+
+
+
+            $('#btnSubmit').click(function(){
+
+                var beginURL = $('#txtBeginLink').val();
+                if(beginURL === ''){
+                     $('#modalInfo').modal('show')
+                     $('#modal-content').html("BEGIN URL DO NOT EMPTY!");
+                     return;
+                }
+
+                if($('#slOptionSubmit').val() == 'TEST'){
+                    var beginURL = $('#txtBeginLink').val();
+                    $.post('{{url_for('source.config_link_check_url_match')}}', {
+                        urlregex: $('#url_pattern').val(),
+                        url: $('#txtBeginLink').val()
+                    }, function (data) {
+
+                        $('#spanMatchLink').html(data.links.length);
+
+                        $('#list-url').find('option').each(function () {
+
+                            var $option = $(this);
+
+                            for (var i = 0; i < data.links.length; i++) {
+                                if ($option.val() == data.links[i]) {
+                                    $option.prop('selected', true);
+                                    break;
+                                }
+                            }
+
+                        });
+                    });
+                }
+                else{
+
+                    $.post('{{url_for('source.config_link_add')}}', {
+                        sid: $('#txt_hidden_sid').val(),
+                        url_pattern: $('#url_pattern').val(),
+                        pattern_type: $('#pattern_type').val(),
+                        link_type: $('input[name=link_type]:checked').val()
+                    }, function (data) {
+
+
+                        $('#modalInfo').modal('show')
+                        $('#modal-content').html(data.message);
+
+
+
+                    });
+                }
+            });
+
+
+
+        });
+    </script>
+{%endblock%}
+
+{%block page_content%}
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalInfo">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">ALERT</h4>
+          </div>
+          <div class="modal-body">
+            <p id="modal-content"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="row">
+
+        <div class="col-md-12">
+             <h3 class="page-header">
+                 SOURCE CONFIG LINK
+                  <div class="pull-right">
+                        <a href="{{url_for('source.config_general', sid=sid)}}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> GENERAL
+                        </a>
+                         &nbsp;
+                        <a href="{{url_for('source.config_parser', sid=sid)}}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> PARSER FIELD
+                        </a>
+                         &nbsp;
+                         <a href="{{url_for('source.config_link', sid=sid)}}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ADD CONFIG LINK
+                        </a>
+                    </div>
+             </h3>
+             <ol class="breadcrumb">
+              <li><a href="/">HOME</a></li>
+              <li><a href="{{url_for('source.index')}}">SOURCE</a></li>
+              <li><a href="{{url_for('source.config_link_list', sid=sid)}}">LIST LINK CONFIG</a></li>
+              <li><a href="{{url_for('source.config_link', sid=sid)}}">CONFIG</a></li>
+              <li class="active">LINK</li>
+            </ol>
+        </div>
+        <div class="col-md-12">
+             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">CONFIG LINK</h3>
+                </div>
+                <div class="panel-body">
+                     <form method="post" action="#">
+                         <input type="hidden" value="{{sid}}" id="txt_hidden_sid">
+                        <div class="form-group">
+                            <label>URL BEGIN</label>
+                            <input type="text" name="txtBeginLink" id="txtBeginLink" class="form-control input-lg" required>
+                        </div>
+                        <div class="form-group">
+                            <button id="btnGetLink" type="button" class="btn btn-primary btn-lg btn-block">GET LINK</button>
+                        </div>
+                         <div class="form-group">
+                            <label>LIST URL</label>
+                            <select id="list-url" name="list-url" class="form-control input-lg" multiple="multiple" style="height:250px;">
+
+                            </select>
+                             <div class="pull-right">
+                                <h5>TOTAL: <span id="spanTotalLink" style="color:red" data-bind="text:totalLink">0</span></h5>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <label>URL CONFIG</label>
+                            <input name="url_pattern" id="url_pattern" type="text" class="form-control input-lg">
+                        </div>
+                         <div>
+                             <div class="radio">
+                                 <label> <input type="radio" id="pattern_type" name="pattern_type" value="REGEX" checked> REGEX PATTERN </label>
+                             </div>
+                              <label class="radio-inline">
+                                <input type="radio" class="link_type" name="link_type" value="BEGIN_LINK" checked>
+                                BEGINLINK
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" class="link_type" name="link_type" value="SUB_LINK">
+                                SUBLINK
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" class="link_type" name="link_type" value="DETAIL_LINK">
+                                DETAIL LINK
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" class="link_type" name="link_type" value="FIX_LINK">
+                                FIXLINK
+                              </label>
+                              <div style="font-size:14px;padding-top:15px;text-align:right;">
+                                <i>+ Code regex only with Integer: <strong>\d{1,}</strong></i><br />
+                                <i>+ Code regex with all: <strong>.*?</strong></i><br />
+                                <i><strong>Total With Test: <span id="spanMatchLink" style="color:red">0</span></strong></i>
+                            </div>
+                         </div>
+                         <div class="form-group">
+                             <label>ACTIONS</label>
+                             <select class="form-control input-lg" id="slOptionSubmit">
+                              <option value="TEST">TEST FIND LINK BY CONFIG</option>
+                              <option value="SAVE">SAVE LINK BY CONFIG</option>
+                            </select>
+                         </div>
+                        <div class="form-group">
+                            <button id="btnSubmit" type="button" class="btn btn-primary btn-lg btn-block">SUBMIT</button>
+                        </div>
+                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}

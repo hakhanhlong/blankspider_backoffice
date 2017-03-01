@@ -1,0 +1,124 @@
+{% extends "_layoutmain.html"%}
+{% block title%}BLANKSPIDER - DASHBOARD{%endblock%}
+{%block js%}
+    <script type="text/javascript">
+        function RemoveFieldConfig(sid, cid, rowid){
+            var r = confirm("ARE YOU SURE REMOVE CONFIG FIELD!");
+            if(r == true){
+                $.post('{{url_for('source.config_field_remove')}}', {
+                        sid: sid,
+                        cid: cid
+                    }, function (data) {
+
+                        $('#modalInfo').modal('show')
+                        $('#modal-content').html(data.message);
+                        if(data.status == 1){
+                            $('#' + rowid).remove();
+                        }
+
+                    });
+            }
+
+        }
+    </script>
+{%endblock%}
+{%block page_content%}
+         <div class="modal fade" tabindex="-1" role="dialog" id="modalInfo">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">ALERT</h4>
+              </div>
+              <div class="modal-body">
+                <p id="modal-content"></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <div class="row">
+            <div class="col-md-12">
+                 <h3 class="page-header">
+                     SOURCE LIST CONFIG FIELD
+                     <div class="pull-right">
+                        <a href="{{url_for('source.config_general', sid=sid)}}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> GENERAL
+                        </a>
+                         &nbsp;
+                        <a href="{{url_for('source.config_parser', sid=sid)}}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> PARSER FIELD
+                        </a>
+                         &nbsp;
+                         <a href="{{url_for('source.config_link', sid=sid)}}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ADD CONFIG LINK
+                        </a>
+                    </div>
+                 </h3>
+                 <ol class="breadcrumb">
+                  <li><a href="/">HOME</a></li>
+                  <li><a href="{{url_for('source.index')}}">SOURCE</a></li>
+                  <li><a href="{{url_for('source.config_field_list', sid=sid)}}">LIST FIELD CONFIG</a></li>
+                  <li class="active">LIST</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row">
+             <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>FIELD NAME</th>
+                            <th>PATTERN TYPE</th>
+                            <th>CONFIG</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if data%}
+                            {% for k, v in data.iteritems()%}
+                                 <tr id="row_{{loop.index}}">
+                                    <td>{{loop.index}}</td>
+                                    <td>{{k}}</td>
+                                    <td>{{v['pattern_type']}}</td>
+                                    <td>
+
+                                            {%if v['step']%}
+
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#STEP</th>
+                                                        <th>START PATTERN</th>
+                                                        <th>END PATTERN</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for _k, _v in v['step'].iteritems()%}
+                                                        <tr>
+                                                            <td>{{_k}}</td>
+                                                            <td>{{_v['start_pattern']}}</td>
+                                                            <td>{{_v['end_pattern']}}</td>
+                                                        </tr>
+                                                    {%endfor%}
+                                                </tbody>
+                                            </table>
+                                        {%endif%}
+
+
+
+
+                                    </td>
+                                    <td><a class="btn btn-default btn-danger btn-sm" href="javascript:RemoveFieldConfig('{{sid}}', '{{k}}', 'row_{{loop.index}}');">DELETE</a></td>
+                                 </tr>
+                            {%endfor%}
+                        {%endif%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{%endblock%}

@@ -1,0 +1,55 @@
+{% extends "_layoutmain.html"%}
+{% block title%}BLANKSPIDER - DASHBOARD{%endblock%}
+{%block page_content%}
+        <div class="row">
+            <div class="col-md-12">
+                 <h3 class="page-header">
+                     PROJECT MANAGEMENT
+                     <div class="pull-right">
+                        <a href="{{url_for('project.add')}}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ADD NEW PROJECT
+                        </a>
+                    </div>
+                 </h3>
+                 <ol class="breadcrumb">
+                  <li><a href="/">HOME</a></li>
+                  <li><a href="#" class="active">PROJECT</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>NAME</th>
+                            <th>CREATED BY</th>
+                            <th>SOURCE COUNT</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%if projects%}
+                            {%for project in projects%}
+                                <tr>
+                                    <td>{{loop.index}}</td>
+                                    <td>{{project.name}}</td>
+                                    <td>{{project.created_by}}</td>
+                                    <td>{{project.source_count}}</td>
+                                    <td>
+                                        <a href="{{url_for('project.edit', pid=project.id)}}" class="btn btn-default btn-xs">
+                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> EDIT
+                                        </a>
+                                        <a href="{{url_for('source.add', pid=project.id)}}" class="btn btn-default btn-xs">
+                                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ADD SOURCE
+                                        </a>
+                                    </td>
+                                </tr>
+                            {%endfor%}
+                        {%endif%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{%endblock%}
