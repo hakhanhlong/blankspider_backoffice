@@ -336,7 +336,7 @@ def config_field_add():
         end_pattern = request.form['end_pattern']
 
         try:
-            if c and c.config['PARSERFIELDS']['data'][field_name]:
+            if c and c.config['PARSERFIELDS']['data']:
                 is_update = True
         except:
             is_update = False
@@ -344,12 +344,27 @@ def config_field_add():
 
 
         if is_update:
-            key_number = len(c.config['PARSERFIELDS']['data'][field_name]['step']) + 1
-            c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
+
+            try:
+                key_number = len(c.config['PARSERFIELDS']['data'][field_name]['step']) + 1
+            except Exception as _error:
+                key_number = 1
+
+            '''c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
             c.config['PARSERFIELDS']['data'][field_name]['step'][str(key_number)] = dict(
                     start_pattern=start_pattern,
-                    end_pattern=end_pattern
-                )
+                    end_pattern=end_pattern)'''
+
+            if key_number > 1:
+                c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
+                c.config['PARSERFIELDS']['data'][field_name]['step'][str(key_number)] = dict(
+                                    start_pattern=start_pattern,
+                                    end_pattern=end_pattern)
+            else:
+                c.config[u'PARSERFIELDS']['data'][str(field_name)] = dict(pattern_type=u'STRING_BETWEEN',
+                                              step={str(key_number): dict(start_pattern=str(start_pattern),
+                                                                          end_pattern=str(end_pattern))})
+
             if configuration_impl.update('SOURCE', sid, c.config):
                 return jsonify({'status': 1, 'message': 'Save Config Field Successfull'})
         else:

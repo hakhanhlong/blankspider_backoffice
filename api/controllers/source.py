@@ -39,4 +39,4 @@ class API_SOURCE_CONFIG(Resource):
             return jsonify({'configlinks': [v for k,v in c.config['PARSERLINKS']['data'].iteritems()]})
 
         if key_config.upper() == 'PARSERFIELDS':
-            return jsonify({'configfields': [dict(name=k, config=v) for k,v in c.config['PARSERFIELDS'].iteritems()]})
+            return jsonify({'configfields': [dict(name=k, config=v) for k,v in c.config['PARSERFIELDS']['data'].iteritems()]})
