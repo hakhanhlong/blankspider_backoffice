@@ -32,7 +32,8 @@ class API_SOURCE_CONFIG(Resource):
                 base_url=c.config['GENERALS']['base_url'],
                 max_trying_count=c.config['GENERALS']['max_trying_count'],
                 thread_number=c.config['GENERALS']['thread_number'],
-                thread_sleep=c.config['GENERALS']['thread_sleep']
+                thread_sleep=c.config['GENERALS']['thread_sleep'],
+                post_url=c.config['GENERALS']['post_url']
             ))
 
         if key_config.upper() == 'PARSERLINKS':
