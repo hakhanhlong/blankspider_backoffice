@@ -33,6 +33,7 @@ class ConfigGeneralForm(Form):
     thread_number = StringField(u'THREAD NUMBER', default='1', validators=[DataRequired()])
     thread_sleep = StringField(u'THREAD SLEEP', default='200', validators=[DataRequired()])
     max_trying_count = StringField(u'MAX TRYING COUNT', default='100', validators=[DataRequired()])
+    post_url = StringField(u'POST URL', default="http://0.0.0.0")
 
 
 

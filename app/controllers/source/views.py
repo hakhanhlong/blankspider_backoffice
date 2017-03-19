@@ -77,15 +77,16 @@ def create():
 def edit(sid):
     source = source_impl.get_by_id(sid)
     form = SourceForm(request.form, obj=source)
+    form.project.choices = [(str(p.id), p.name) for p in project_impl.get_all()]
 
 
     if request.method == 'GET':
         form.project.data = source.project_id
 
-    if source.is_active:
-        form.is_active.data = 'ACTIVE'
-    else:
-        form.is_active.data = 'DEACTIVE'
+        if source.is_active:
+            form.is_active.data = 'ACTIVE'
+        else:
+            form.is_active.data = 'DEACTIVE'
 
 
     if request.method == 'POST' and form.validate():
@@ -143,6 +144,11 @@ def config_general(sid):
             form.thread_sleep.data = c.config['GENERALS']['thread_sleep']
             form.max_trying_count.data = c.config['GENERALS']['max_trying_count']
 
+            try:
+                form.post_url.data = c.config['GENERALS']['post_url']
+            except:
+                pass
+
 
     if request.method == 'POST' and form.validate():
         try:
@@ -151,7 +157,8 @@ def config_general(sid):
                     base_url=form.base_url.data,
                     thread_number=form.thread_number.data,
                     thread_sleep=form.thread_sleep.data,
-                    max_trying_count=form.max_trying_count.data
+                    max_trying_count=form.max_trying_count.data,
+                    post_url = form.post_url.data
                 ))
                 if configuration_impl.insert('SOURCE', sid, config):
                     flash('#INFO: INSERT CONFIG SOURCE SUCCESSFULL', 'info')
@@ -161,7 +168,8 @@ def config_general(sid):
                     base_url=form.base_url.data,
                     thread_number=form.thread_number.data,
                     thread_sleep=form.thread_sleep.data,
-                    max_trying_count=form.max_trying_count.data
+                    max_trying_count=form.max_trying_count.data,
+                    post_url=form.post_url.data
                 )
                 if configuration_impl.update('SOURCE', sid, c.config):
                     flash('#INFO: UPDATE CONFIG SOURCE SUCCESSFULL', 'info')
