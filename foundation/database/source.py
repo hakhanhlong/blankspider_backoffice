@@ -11,4 +11,5 @@ class SOURCES(db.Document):
     project_id = db.StringField(max_length=255, required=True)
     project_name = db.StringField(max_length=255, required=True)
     type_spider = db.StringField(max_length=255, required=True, default=u'DEFAULT')
+    server_ip = db.StringField(max_length=255, required=False, default=u'0.0.0.0')
 

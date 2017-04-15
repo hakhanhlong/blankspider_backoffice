@@ -25,7 +25,7 @@ def add(pid):
                 is_active = False
 
             s = source_impl.insert(form.name.data, form.mode.data, is_active, form.status.data,
-                               current_user.username, form.project.data, p.name, form.type_spider.data)
+                               current_user.username, form.project.data, p.name, form.type_spider.data, form.server_ip.data)
 
             if s:
                 source_count = p.source_count + 1
@@ -55,7 +55,8 @@ def create():
                 is_active = False
 
             s = source_impl.insert(form.name.data, form.mode.data, is_active, form.status.data,
-                               current_user.username, form.project.data, p.name,form.type_spider.data)
+                               current_user.username, form.project.data, p.name,form.type_spider.data,
+                                form.server_ip.data)
             if s:
                 source_count = p.source_count + 1
                 project_impl.update(form.project.data, p.name, source_count)
@@ -97,7 +98,10 @@ def edit(sid):
             else:
                 is_active = False
 
-            s = source_impl.update(sid, form.name.data, form.mode.data, is_active, form.status.data, form.project.data, p.name, form.type_spider.data)
+            s = source_impl.update(sid, form.name.data, form.mode.data, is_active, form.status.data, form.project.data,
+                                   p.name,
+                                   form.type_spider.data,
+                                   form.server_ip.data)
 
 
             if source.project_id != form.project.data:
@@ -144,7 +148,11 @@ def config_general(sid):
             form.thread_sleep.data = c.config['GENERALS']['thread_sleep']
             form.max_trying_count.data = c.config['GENERALS']['max_trying_count']
 
+
+
             try:
+                form.thread_number_parsing.data = c.config['GENERALS']['thread_number_parsing']
+                form.update_sleep.data = c.config['GENERALS']['update_sleep']
                 form.post_url.data = c.config['GENERALS']['post_url']
             except:
                 pass
@@ -158,7 +166,10 @@ def config_general(sid):
                     thread_number=form.thread_number.data,
                     thread_sleep=form.thread_sleep.data,
                     max_trying_count=form.max_trying_count.data,
-                    post_url = form.post_url.data
+                    post_url = form.post_url.data,
+                    thread_number_parsing = form.thread_number_parsing.data,
+                    update_sleep = form.update_sleep.data
+
                 ))
                 if configuration_impl.insert('SOURCE', sid, config):
                     flash('#INFO: INSERT CONFIG SOURCE SUCCESSFULL', 'info')
@@ -169,7 +180,9 @@ def config_general(sid):
                     thread_number=form.thread_number.data,
                     thread_sleep=form.thread_sleep.data,
                     max_trying_count=form.max_trying_count.data,
-                    post_url=form.post_url.data
+                    post_url=form.post_url.data,
+                    thread_number_parsing = form.thread_number_parsing.data,
+                    update_sleep = form.update_sleep.data
                 )
                 if configuration_impl.update('SOURCE', sid, c.config):
                     flash('#INFO: UPDATE CONFIG SOURCE SUCCESSFULL', 'info')

@@ -21,7 +21,8 @@ class API_SOURCE(Resource):
             project_id=s.project_id,
             project_name=s.project_name,
             status=s.status,
-            type_spider=s.type_spider
+            type_spider=s.type_spider,
+            server_ip=s.server_ip
         ))
 
 class API_SOURCE_CONFIG(Resource):
@@ -33,7 +34,9 @@ class API_SOURCE_CONFIG(Resource):
                 max_trying_count=c.config['GENERALS']['max_trying_count'],
                 thread_number=c.config['GENERALS']['thread_number'],
                 thread_sleep=c.config['GENERALS']['thread_sleep'],
-                post_url=c.config['GENERALS']['post_url']
+                post_url=c.config['GENERALS']['post_url'],
+                thread_number_parsing=c.config['GENERALS']['thread_number_parsing'],
+                update_sleep=c.config['GENERALS']['update_sleep']
             ))
 
         if key_config.upper() == 'PARSERLINKS':

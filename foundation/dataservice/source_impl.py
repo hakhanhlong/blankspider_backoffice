@@ -16,11 +16,12 @@ def get_by_projectid(pid):
     return s
 
 
-def insert(name, mode,is_active,status,created_by,project_id,project_name, type):
-    s = SOURCES(name=name, mode=mode, is_active=is_active, status=status, created_by=created_by, project_id=project_id, project_name=project_name, type_spider=type)
+def insert(name, mode,is_active,status,created_by,project_id,project_name, type, server_ip):
+    s = SOURCES(name=name, mode=mode, is_active=is_active, status=status, created_by=created_by, project_id=project_id,
+                project_name=project_name, type_spider=type, server_ip=server_ip)
     return s.save()
 
-def update(id, name, mode, is_active, status, project_id, project_name, type=type):
+def update(id, name, mode, is_active, status, project_id, project_name, type, server_ip):
     s = SOURCES.objects(id=id).first()
     s.name = name
     s.mode = mode
@@ -29,4 +30,5 @@ def update(id, name, mode, is_active, status, project_id, project_name, type=typ
     s.project_id = project_id
     s.project_name = project_name
     s.type_spider=type
+    s.server_ip = server_ip
     return s.save()

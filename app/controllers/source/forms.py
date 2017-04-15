@@ -29,12 +29,17 @@ class SourceForm(Form):
     #project = SelectField(u'SELECT PROJECT', choices=[(str(p.id), p.name) for p in project_impl.get_all()])
     project = SelectField(u'SELECT PROJECT')
 
+    server_ip = StringField(u'SERVER IP', default="0.0.0.0")
+
 class ConfigGeneralForm(Form):
     base_url = StringField(u'BASE URL', validators=[DataRequired()])
-    thread_number = StringField(u'THREAD NUMBER', default='1', validators=[DataRequired()])
+    thread_number = StringField(u'THREAD NUMBER FIND LINK', default='1', validators=[DataRequired()])
+    thread_number_parsing = StringField(u'THREAD NUMBER PARSING', default='1', validators=[DataRequired()])
     thread_sleep = StringField(u'THREAD SLEEP', default='200', validators=[DataRequired()])
+    update_sleep = StringField(u'UPDATE SLEEP', default='300000', validators=[DataRequired()])
     max_trying_count = StringField(u'MAX TRYING COUNT', default='100', validators=[DataRequired()])
     post_url = StringField(u'POST URL', default="http://0.0.0.0")
+
 
 
 
