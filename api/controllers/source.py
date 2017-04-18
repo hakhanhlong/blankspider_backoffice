@@ -11,19 +11,30 @@ class API_LIST_SOURCE(Resource):
 class API_SOURCE(Resource):
     def get(self, source_id):
         s = source_impl.get_by_id(source_id)
-        return jsonify(dict(
-            id=str(s.id),
-            created_by=s.created_by,
-            created_date=s.created_date,
-            is_active=s.is_active,
-            mode=s.mode,
-            name=s.name,
-            project_id=s.project_id,
-            project_name=s.project_name,
-            status=s.status,
-            type_spider=s.type_spider,
-            server_ip=s.server_ip
-        ))
+        if s is not None:
+            return jsonify(dict(
+                id=str(s.id),
+                created_by=s.created_by,
+                created_date=s.created_date,
+                is_active=s.is_active,
+                mode=s.mode,
+                name=s.name,
+                project_id=s.project_id,
+                project_name=s.project_name,
+                status=s.status,
+                type_spider=s.type_spider,
+                server_ip=s.server_ip
+            ))
+        else:
+            return jsonify({})
+
+class API_SOURCE_BY_SERVER(Resource):
+    def get(self, server_ip):
+        s = source_impl.get_by_server_ip(server_ip)
+        if s is not None:
+            return jsonify({'sources': s})
+        else:
+            return jsonify({'sources': []})
 
 class API_SOURCE_CONFIG(Resource):
     def get(self, key_config, s_id):

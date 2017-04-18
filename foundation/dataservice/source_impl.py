@@ -11,8 +11,16 @@ def get_by_id(sid):
     s = SOURCES.objects(id=sid).first()
     return s
 
+def get_by_server_ip(sip):
+    s = SOURCES.objects(server_ip=sip)
+    return s
+
 def get_by_projectid(pid):
     s = SOURCES.objects(project_id=str(pid))
+    return s
+
+def get_by_projectid_and_serverip(pid, sip):
+    s = SOURCES.objects(project_id=str(pid), server_ip=sip)
     return s
 
 

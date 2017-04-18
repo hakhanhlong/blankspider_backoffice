@@ -67,14 +67,16 @@ def create_app(config_name):
     ############### end blueprint   ################################
 
     ################# begin api ####################################
-    from api.controllers.project import API_PROJECT, API_LIST_PROJECT
+    from api.controllers.project import API_PROJECT, API_LIST_PROJECT, API_LIST_PROJECT_WITH_SERVERIP
     api.add_resource(API_LIST_PROJECT, '/api/v.1/projects')
     api.add_resource(API_PROJECT, '/api/v.1/projects/<string:project_id>')
+    api.add_resource(API_LIST_PROJECT_WITH_SERVERIP, '/api/v.1/projects/server/<string:server_ip>')
 
 
-    from api.controllers.source import API_SOURCE, API_LIST_SOURCE, API_SOURCE_CONFIG
+    from api.controllers.source import API_SOURCE, API_LIST_SOURCE, API_SOURCE_CONFIG, API_SOURCE_BY_SERVER
     api.add_resource(API_LIST_SOURCE, '/api/v.1/sources')
     api.add_resource(API_SOURCE, '/api/v.1/sources/<string:source_id>')
+    api.add_resource(API_SOURCE_BY_SERVER, '/api/v.1/sources/server/<string:server_ip>')
     api.add_resource(API_SOURCE_CONFIG, '/api/v.1/sources/config/<string:key_config>/<string:s_id>')
 
     ################################################################
