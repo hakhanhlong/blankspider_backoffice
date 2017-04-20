@@ -62,7 +62,10 @@
                          return;
                     }
 
-
+                    var remove_html = 0;
+                    if($("#chkRemoveHtmlTag").is(':checked')){
+                        remove_html = 1;
+                    }
 
 
                     $.post('{{url_for('source.config_field_add')}}', {
@@ -70,7 +73,7 @@
                         field_name: $('#field-name').val(),
                         start_pattern: $('#start-string').val(),
                         end_pattern: $('#end-string').val(),
-                        remove_html: $('#chkRemoveHtmlTag').val()
+                        remove_html: remove_html
                     }, function (data) {
 
 

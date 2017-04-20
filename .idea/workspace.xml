@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3a10d0b5-5094-4c91-bf98-8ff327c6004c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/source/views.py" afterPath="$PROJECT_DIR$/app/controllers/source/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/source/config/list_field.html" afterPath="$PROJECT_DIR$/app/templates/source/config/list_field.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/source/config/parser.html" afterPath="$PROJECT_DIR$/app/templates/source/config/parser.html" />
     </list>
     <ignored path="BLANKSPIDER_MANAGEMENT.iws" />
@@ -25,7 +23,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/source/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="265">
@@ -35,11 +33,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="parser.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="parser.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/templates/source/config/parser.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="72" column="35" lean-forward="false" selection-start-line="72" selection-start-column="24" selection-end-line="72" selection-end-column="35" />
+            <state relative-caret-position="225">
+              <caret line="75" column="48" lean-forward="false" selection-start-line="75" selection-start-column="48" selection-end-line="75" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -135,9 +133,9 @@
         <option value="$PROJECT_DIR$/app/__init__.py" />
         <option value="$PROJECT_DIR$/api/controllers/project.py" />
         <option value="$PROJECT_DIR$/config.py" />
-        <option value="$PROJECT_DIR$/app/templates/source/config/parser.html" />
         <option value="$PROJECT_DIR$/app/controllers/source/views.py" />
         <option value="$PROJECT_DIR$/app/templates/source/config/list_field.html" />
+        <option value="$PROJECT_DIR$/app/templates/source/config/parser.html" />
       </list>
     </option>
   </component>
@@ -1017,7 +1015,14 @@
       <option name="project" value="LOCAL" />
       <updated>1492503891468</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="edit source commit">
+      <created>1492659052877</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1492659052877</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1372,14 +1377,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/source/config/parser.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="72" column="35" lean-forward="false" selection-start-line="72" selection-start-column="24" selection-end-line="72" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/source/config/list_field.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="335">
@@ -1395,6 +1392,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="265">
           <caret line="395" column="45" lean-forward="true" selection-start-line="395" selection-start-column="45" selection-end-line="395" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/source/config/parser.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="75" column="48" lean-forward="false" selection-start-line="75" selection-start-column="48" selection-end-line="75" selection-end-column="48" />
           <folding />
         </state>
       </provider>
