@@ -92,18 +92,20 @@
 
                                             <table class="table table-bordered">
                                                 <thead>
-                                                    <tr>
-                                                        <th>#STEP</th>
-                                                        <th>START PATTERN</th>
+                                                    <tr class="success">
+                                                        <th style="width:50px;">#STEP</th>
+                                                        <th style="width:450px;">START PATTERN</th>
                                                         <th>END PATTERN</th>
+                                                        <th>REMOVE HTML</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {% for _k, _v in v['step'].iteritems()%}
-                                                        <tr>
+                                                        <tr class="warning">
                                                             <td>{{_k}}</td>
                                                             <td>{{_v['start_pattern']}}</td>
                                                             <td>{{_v['end_pattern']}}</td>
+                                                            <td>{{_v['remove_html']}}</td>
                                                         </tr>
                                                     {%endfor%}
                                                 </tbody>

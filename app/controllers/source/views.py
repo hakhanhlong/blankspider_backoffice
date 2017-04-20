@@ -355,6 +355,7 @@ def config_field_add():
         field_name = request.form['field_name']
         start_pattern = request.form['start_pattern']
         end_pattern = request.form['end_pattern']
+        remove_html = request.form['remove_html']
 
         try:
             if c and c.config['PARSERFIELDS']['data']:
@@ -379,12 +380,14 @@ def config_field_add():
             if key_number > 1:
                 c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
                 c.config['PARSERFIELDS']['data'][field_name]['step'][str(key_number)] = dict(
-                                    start_pattern=start_pattern,
-                                    end_pattern=end_pattern)
+                                    start_pattern=str(start_pattern),
+                                    end_pattern=str(end_pattern),
+                                    remove_html=str(remove_html))
             else:
                 c.config[u'PARSERFIELDS']['data'][str(field_name)] = dict(pattern_type=u'STRING_BETWEEN',
                                               step={str(key_number): dict(start_pattern=str(start_pattern),
-                                                                          end_pattern=str(end_pattern))})
+                                                                          end_pattern=str(end_pattern),
+                                                                          remove_html=str(remove_html))})
 
             if configuration_impl.update('SOURCE', sid, c.config):
                 return jsonify({'status': 1, 'message': 'Save Config Field Successfull'})
@@ -393,7 +396,8 @@ def config_field_add():
             c.config[u'PARSERFIELDS'] = dict(
                 data={str(field_name): dict(pattern_type=u'STRING_BETWEEN',
                                      step={u'1': dict(start_pattern=str(start_pattern),
-                                                      end_pattern=str(end_pattern))}
+                                                      end_pattern=str(end_pattern),
+                                                      remove_html=str(remove_html))}
                                      )})
             if configuration_impl.update('SOURCE', sid, c.config):
                 return jsonify({'status': 1, 'message': 'Save Config Field Successfull'})
