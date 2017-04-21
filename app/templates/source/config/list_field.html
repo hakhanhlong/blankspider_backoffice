@@ -96,7 +96,7 @@
                                                         <th style="width:50px;">#STEP</th>
                                                         <th style="width:450px;">START PATTERN</th>
                                                         <th>END PATTERN</th>
-                                                        <th>REMOVE HTML</th>
+                                                        <th>ACTION</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -105,16 +105,15 @@
                                                             <td>{{_k}}</td>
                                                             <td>{{_v['start_pattern']}}</td>
                                                             <td>{{_v['end_pattern']}}</td>
-                                                            <td>{{_v['remove_html']}}</td>
+                                                            <td>
+                                                                Remove HTML: {{_v['remove_html']}}<br>
+                                                                Break Parsing: {{_v['break_parsing']}}
+                                                            </td>
                                                         </tr>
                                                     {%endfor%}
                                                 </tbody>
                                             </table>
                                         {%endif%}
-
-
-
-
                                     </td>
                                     <td><a class="btn btn-default btn-danger btn-sm" href="javascript:RemoveFieldConfig('{{sid}}', '{{k}}', 'row_{{loop.index}}');">DELETE</a></td>
                                  </tr>

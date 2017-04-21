@@ -66,6 +66,10 @@
                     if($("#chkRemoveHtmlTag").is(':checked')){
                         remove_html = 1;
                     }
+                    var break_parsing = 0;
+                    if($('#chkBreakParsing').is(':checked')){
+                        break_parsing = 1;
+                    }
 
 
                     $.post('{{url_for('source.config_field_add')}}', {
@@ -73,7 +77,8 @@
                         field_name: $('#field-name').val(),
                         start_pattern: $('#start-string').val(),
                         end_pattern: $('#end-string').val(),
-                        remove_html: remove_html
+                        remove_html: remove_html,
+                        break_parsing: break_parsing
                     }, function (data) {
 
 
@@ -215,6 +220,9 @@
                                     <div class="checkbox">
                                         <label>
                                             <input type="checkbox" id="chkRemoveHtmlTag" name="chkRemoveHtmlTag" value="1"/>Remove "HTML Tag"
+                                        </label>&nbsp;&nbsp;&nbsp;
+                                        <label>
+                                            <input type="checkbox" id="chkBreakParsing" name="chkBreakParsing" value="1"/>Break "Parsing"
                                         </label>
                                     </div>
                                 </div>
