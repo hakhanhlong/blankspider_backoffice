@@ -5,6 +5,8 @@ from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask.ext.login import current_user, login_required
 from foundation.dataservice import project_impl, source_impl, configuration_impl
 import requests
+from lxml import etree, html
+import urllib2
 
 
 
@@ -373,10 +375,6 @@ def config_field_add():
             except Exception as _error:
                 key_number = 1
 
-            '''c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
-            c.config['PARSERFIELDS']['data'][field_name]['step'][str(key_number)] = dict(
-                    start_pattern=start_pattern,
-                    end_pattern=end_pattern)'''
 
             if key_number > 1:
                 c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
@@ -421,7 +419,6 @@ def config_field_list(sid):
         return render_template('source/config/list_field.html', sid=sid, data=None)
 
 
-
 @source.route('/config/field/remove', methods=['GET', 'POST'])
 @login_required
 def config_field_remove():
@@ -436,5 +433,111 @@ def config_field_remove():
                     return jsonify({'status': 1, 'message': 'Remove Config Field Successfull'})
         except Exception as error:
             return jsonify({'status': -1, 'message': error.message})
+    except Exception as ex:
+        return jsonify({'status': -1, 'message': ex.message})
+
+@source.route('/config/video/remove', methods=['GET', 'POST'])
+@login_required
+def config_video_remove():
+    try:
+        sid = request.form['sid']
+        ckey = request.form['cid']
+        c = configuration_impl.get_config('SOURCE', sid)
+        try:
+            if c.config['PARSERVIDEOS']['data'][ckey]:
+                del c.config['PARSERVIDEOS']['data'][ckey]
+                if configuration_impl.update('SOURCE', sid, c.config):
+                    return jsonify({'status': 1, 'message': 'Remove Config Video Successfull'})
+        except Exception as error:
+            return jsonify({'status': -1, 'message': error.message})
+    except Exception as ex:
+        return jsonify({'status': -1, 'message': ex.message})
+
+
+
+#//div[contains(@data-component-type, 'video')] xpath example
+@source.route('/config/video/request/test', methods=['GET', 'POST'])
+@login_required
+def video_request_test():
+    try:
+        url = request.form['txtBeginLink']
+        field_value = request.form['field_value']
+
+        response = urllib2.urlopen(url)
+        htmlparser = etree.HTMLParser()
+        tree = etree.parse(response, htmlparser)
+        data = tree.xpath(field_value)
+        result = []
+        for x in data:
+            result.append(etree.tostring(x, pretty_print=True))
+
+        return jsonify({'result': ''.join(result)})
+
+    except Exception as ex:
+        flash('#ERROR:' + ex)
+        return jsonify({'result': "ERROR", 'url': url,
+                        'field_value':field_value})
+
+@source.route('/config/video/list/<sid>', methods=['GET'])
+@login_required
+def config_video_list(sid):
+    try:
+        c = configuration_impl.get_config('SOURCE', sid)
+        list_video_config = dict(c.config['PARSERVIDEOS']['data'])
+
+        return render_template('source/config/video/index.html', sid=sid, data=list_video_config)
+    except Exception as ex:
+        flash('#INFO: EMPTY LINK CONFIG')
+        return render_template('source/config/video/index.html', sid=sid, data=None)
+
+@login_required
+@source.route('/config/video/<sid>', methods=['GET'])
+def config_video(sid):
+    return render_template('source/config/video/add.html', sid=sid)
+
+@source.route('/config/video/add', methods=['GET', 'POST'])
+@login_required
+def config_video_add():
+    try:
+        is_update = False
+        sid = request.form['sid']
+        c = configuration_impl.get_config('SOURCE', sid)
+
+        field_name = request.form['field_name']
+        field_value = request.form['field_value']
+
+        try:
+            if c and c.config['PARSERVIDEOS']['data']:
+                is_update = True
+        except:
+            is_update = False
+
+
+
+        if is_update:
+
+            try:
+                key_number = len(c.config['PARSERVIDEOS']['data'][field_name]['step']) + 1
+            except Exception as _error:
+                key_number = 1
+
+
+            if key_number > 1:
+                c.config['PARSERVIDEOS']['data'][field_name]['pattern_type'] = u'XPATH'
+                c.config['PARSERVIDEOS']['data'][field_name]['step'][str(key_number)] = dict(
+                                    field_value=str(field_value))
+            else:
+                c.config['PARSERVIDEOS']['data'][str(field_name)] = dict(pattern_type=u'XPATH',
+                                              step={str(key_number): dict(field_value=str(field_value))})
+
+            if configuration_impl.update('SOURCE', sid, c.config):
+                return jsonify({'status': 1, 'message': 'Save Config Video Successfull'})
+        else:
+
+            c.config['PARSERVIDEOS'] = dict(
+                data={str(field_name): dict(pattern_type=u'XPATH',
+                                     step={'1': dict(field_value=str(field_value))})})
+            if configuration_impl.update('SOURCE', sid, c.config):
+                return jsonify({'status': 1, 'message': 'Save Config Videos Successfull'})
     except Exception as ex:
         return jsonify({'status': -1, 'message': ex.message})

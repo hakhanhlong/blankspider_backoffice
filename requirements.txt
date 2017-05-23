@@ -8,3 +8,4 @@ Werkzeug
 flask-restful
 beautifulsoup4
 requests
+lxml

@@ -1,13 +1,12 @@
 {% extends "_layoutmain.html"%}
 {% block title%}BLANKSPIDER - DASHBOARD{%endblock%}
 {%block js%}
-
+    <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
     <script type="text/javascript">
-
-        function RemoveLinkConfig(sid, cid){
-            var r = confirm("ARE YOU SURE REMOVE CONFIG LINK!");
+        function RemoveVideoConfig(sid, cid, rowid){
+            var r = confirm("ARE YOU SURE REMOVE CONFIG VIDEO!");
             if(r == true){
-                $.post('{{url_for('source.config_link_remove')}}', {
+                $.post('{{url_for('source.config_video_remove')}}', {
                         sid: sid,
                         cid: cid
                     }, function (data) {
@@ -15,12 +14,10 @@
                         $('#modalInfo').modal('show')
                         $('#modal-content').html(data.message);
                         if(data.status == 1){
-                            $('#row_' + cid).remove();
+                            $('#' + rowid).remove();
                         }
-
                     });
             }
-
         }
     </script>
 {%endblock%}
@@ -44,8 +41,8 @@
         <div class="row">
             <div class="col-md-12">
                  <h3 class="page-header">
-                     SOURCE LIST CONFIG LINK
-                      <div class="pull-right">
+                     SOURCE LIST CONFIG FIELD
+                     <div class="pull-right">
                         <a href="{{url_for('source.config_general', sid=sid)}}" class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> GENERAL
                         </a>
@@ -58,16 +55,15 @@
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ADD CONFIG LINK
                         </a>
 
-                          <a href="{{url_for('source.config_video', sid=sid)}}" class="btn btn-primary btn-sm">
+                         <a href="{{url_for('source.config_video', sid=sid)}}" class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> PARSER VIDEO
                         </a>
-
                     </div>
                  </h3>
                  <ol class="breadcrumb">
                   <li><a href="/">HOME</a></li>
                   <li><a href="{{url_for('source.index')}}">SOURCE</a></li>
-                  <li><a href="{{url_for('source.config_link_list', sid=sid)}}">LINK CONFIG</a></li>
+                  <li><a href="{{url_for('source.config_field_list', sid=sid)}}">LIST FIELD CONFIG</a></li>
                   <li class="active">LIST</li>
                 </ol>
             </div>
@@ -79,21 +75,42 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>URL PATTERN</th>
+                            <th>FIELD NAME</th>
                             <th>PATTERN TYPE</th>
-                            <th>LINK TYPE</th>
+                            <th>CONFIG</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% if data%}
                             {% for k, v in data.iteritems()%}
-                                 <tr id="row_{{k}}">
+                                 <tr id="row_{{loop.index}}">
                                     <td>{{loop.index}}</td>
-                                    <td>{{v['url_pattern']}}</td>
+                                    <td>{{k}}</td>
                                     <td>{{v['pattern_type']}}</td>
-                                    <td>{{v['link_type']}}</td>
-                                    <td><a class="btn btn-default btn-danger btn-sm" href="javascript:RemoveLinkConfig('{{sid}}', '{{k}}');">DELETE</a></td>
+                                    <td>
+
+                                            {%if v['step']%}
+
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr class="success">
+                                                        <th style="width:50px;">#STEP</th>
+                                                        <th style="width:450px;">VALUE</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for _k, _v in v['step'].iteritems()%}
+                                                        <tr class="warning">
+                                                            <td>{{_k}}</td>
+                                                            <td>{{_v['field_value']}}</td>
+                                                        </tr>
+                                                    {%endfor%}
+                                                </tbody>
+                                            </table>
+                                        {%endif%}
+                                    </td>
+                                    <td><a class="btn btn-default btn-danger btn-sm" href="javascript:RemoveVideoConfig('{{sid}}', '{{k}}', 'row_{{loop.index}}');">DELETE</a></td>
                                  </tr>
                             {%endfor%}
                         {%endif%}

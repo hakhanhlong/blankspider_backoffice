@@ -55,3 +55,6 @@ class API_SOURCE_CONFIG(Resource):
 
         if key_config.upper() == 'PARSERFIELDS':
             return jsonify({'configfields': [dict(name=k, config=v) for k,v in c.config['PARSERFIELDS']['data'].iteritems()]})
+
+        if key_config.upper() == 'PARSERVIDEOS':
+            return jsonify({'configvideos': [dict(name=k, config=v) for k,v in c.config['PARSERVIDEOS']['data'].iteritems()]})

@@ -1,5 +1,5 @@
 {% extends "_layoutmain.html"%}
-{% block title%}BLANKSPIDER - SOURCE CONFIG PARSER{%endblock%}
+{% block title%}BLANKSPIDER - SOURCE CONFIG VIDEO PARSER{%endblock%}
 
 {%block js%}
     <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
@@ -16,8 +16,6 @@
                      $('#modal-content').html("BEGIN URL DO NOT EMPTY!");
                      return;
                 }
-
-
 
 
                 $.ajax({
@@ -46,10 +44,25 @@
 
                 if($('#slOptionSubmit').val() == 'TEST'){
 
-                    start_string = $('#start-string').val();
-                    end_string = $('#end-string').val();
+                    field_value = $('#field-value').val();
+                    $.ajax({
+                        url: '{{url_for('source.video_request_test')}}',
+                        data: {
+                            'txtBeginLink':$('#txtBeginLink').val(),
+                            'field_value':field_value},
+                        type: 'POST',
+                        success: function(response) {
 
-                    var result = parseBetween(start_string, end_string);
+                            $('#txtResult').val(response.result);
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+
+                    //var result = parseBetween(start_string, end_string);
+
+
                     $('#txtResult').val(result);
 
                 }
@@ -62,23 +75,11 @@
                          return;
                     }
 
-                    var remove_html = 0;
-                    if($("#chkRemoveHtmlTag").is(':checked')){
-                        remove_html = 1;
-                    }
-                    var break_parsing = 0;
-                    if($('#chkBreakParsing').is(':checked')){
-                        break_parsing = 1;
-                    }
 
-
-                    $.post('{{url_for('source.config_field_add')}}', {
+                    $.post('{{url_for('source.config_video_add')}}', {
                         sid: $('#txt_hidden_sid').val(),
                         field_name: $('#field-name').val(),
-                        start_pattern: $('#start-string').val(),
-                        end_pattern: $('#end-string').val(),
-                        remove_html: remove_html,
-                        break_parsing: break_parsing
+                        field_value: $('#field-value').val()
                     }, function (data) {
 
 
@@ -148,14 +149,18 @@
                          <a href="{{url_for('source.config_link', sid=sid)}}" class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ADD CONFIG LINK
                         </a>
+
+                          <a href="{{url_for('source.config_video', sid=sid)}}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> PARSER VIDEO
+                        </a>
                     </div>
              </h3>
              <ol class="breadcrumb">
               <li><a href="/">HOME</a></li>
               <li><a href="{{url_for('source.index')}}">SOURCE</a></li>
-              <li><a href="{{url_for('source.config_field_list', sid=sid)}}">LIST FIELD CONFIG</a></li>
-              <li><a href="{{url_for('source.config_parser', sid=sid)}}">PARSER</a></li>
-              <li class="active">LINK</li>
+              <li><a href="{{url_for('source.config_video_list', sid=sid)}}">LIST VIDEO CONFIG</a></li>
+              <li><a href="{{url_for('source.config_video', sid=sid)}}">PARSER VIDEO</a></li>
+              <li class="active">VIDEO</li>
             </ol>
         </div>
         <div class="col-md-12">
@@ -198,35 +203,25 @@
                             <form action="#" method="post" role="form">
                                 <div class="form-group">
                                     <label>FIELD NAME</label>
-                                    <input type="text" class="form-control input-lg" name="field-name" id="field-name">
+                                    <select class="form-control input-lg" id="field-name" name="field-name">
+                                        <option value="pattern">PATTERN</option>
+                                        <option value="attribute">ATTRIBUTE</option>
+                                        <option value="format_player">FORMAT PLAYER</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>START STRING</label>
-                                    <textarea class="form-control" name="start-string" id="start-string" rows="5" spellcheck="false"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label>END STRING</label>
-                                    <textarea class="form-control" name="end-string" id="end-string" rows="5" spellcheck="false"></textarea>
+                                    <label>VALUE</label>
+                                    <textarea name="field-value" id="field-value" class="form-control" rows="5" spellcheck="false"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>RESULT</label>
                                     <textarea name="txtResult" id="txtResult" class="form-control" rows="10" spellcheck="false"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" id="chkRemoveHtmlTag" name="chkRemoveHtmlTag" value="1"/>Remove "HTML Tag"
-                                        </label>&nbsp;&nbsp;&nbsp;
-                                        <label>
-                                            <input type="checkbox" id="chkBreakParsing" name="chkBreakParsing" value="1"/>Break "Parsing"
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                      <label>ACTIONS</label>
                                      <select class="form-control input-lg" id="slOptionSubmit">
-                                      <option value="TEST">TEST FIND LINK BY CONFIG</option>
-                                      <option value="SAVE">SAVE LINK BY CONFIG</option>
+                                      <option value="TEST">TEST VIDEO BY CONFIG</option>
+                                      <option value="SAVE">SAVE VIDEO BY CONFIG</option>
                                     </select>
                                  </div>
                                 <div class="form-group">
