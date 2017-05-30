@@ -9,6 +9,20 @@
 
         $(document).ready(function(){
 
+            $('#form-config-field').on('click', 'input[name=pattern_type]',function(){
+                var value = $(this).val();
+                if(value === 'STRING_BETWEEN'){
+                    $('#startstring').css('display','block');
+                    $('#endstring').css('display','block');
+                    $('#xpathconfig').css('display','none');
+                }
+                else{
+                    $('#startstring').css('display','none');
+                    $('#endstring').css('display','none');
+                    $('#xpathconfig').css('display','block');
+                }
+            });
+
             $('#btnGetHtml').click(function(){
                 var beginURL = $('#txtBeginLink').val();
                 if(beginURL === ''){
@@ -38,6 +52,7 @@
             $('#btnSubmit').click(function(){
 
                 var beginURL = $('#txtBeginLink').val();
+                var pattern_type = $('input[name=pattern_type]:checked').val()
                 if(beginURL === ''){
                      $('#modalInfo').modal('show')
                      $('#modal-content').html("BEGIN URL DO NOT EMPTY!");
@@ -46,12 +61,24 @@
 
                 if($('#slOptionSubmit').val() == 'TEST'){
 
-                    start_string = $('#start-string').val();
-                    end_string = $('#end-string').val();
+                    if(pattern_type === 'STRING_BETWEEN'){
 
-                    var result = parseBetween(start_string, end_string);
-                    $('#txtResult').val(result);
+                        start_string = $('#start-string').val();
+                        end_string = $('#end-string').val();
+                        var result = parseBetween(start_string, end_string);
+                        $('#txtResult').val(result);
+                    }
+                    else if(pattern_type === 'XPATH'){
+                        xpath_config = $('#xpath-config').val();
+                        $.post('{{url_for('source.config_field_test_xpath')}}', {
+                            url: $('#txtBeginLink').val(),
+                            xpath: xpath_config
+                        }, function (data) {
 
+
+                            $('#txtResult').val(data.text);
+                        });
+                    }
                 }
                 else{
 
@@ -72,22 +99,41 @@
                     }
 
 
-                    $.post('{{url_for('source.config_field_add')}}', {
-                        sid: $('#txt_hidden_sid').val(),
-                        field_name: $('#field-name').val(),
-                        start_pattern: $('#start-string').val(),
-                        end_pattern: $('#end-string').val(),
-                        remove_html: remove_html,
-                        break_parsing: break_parsing
-                    }, function (data) {
+
+                    if(pattern_type === 'STRING_BETWEEN'){
+                        $.post('{{url_for('source.config_field_add')}}', {
+                            sid: $('#txt_hidden_sid').val(),
+                            field_name: $('#field-name').val(),
+                            start_pattern: $('#start-string').val(),
+                            end_pattern: $('#end-string').val(),
+                            remove_html: remove_html,
+                            break_parsing: break_parsing,
+                            pattern_type: pattern_type
+                        }, function (data) {
 
 
-                        $('#modalInfo').modal('show')
-                        $('#modal-content').html(data.message);
+                            $('#modalInfo').modal('show')
+                            $('#modal-content').html(data.message);
+                        });
+                    }
+                    else{
+                        $.post('{{url_for('source.config_field_add')}}', {
+                            sid: $('#txt_hidden_sid').val(),
+                            field_name: $('#field-name').val(),
+                            xpath:xpath_config = $('#xpath-config').val(),
+                            remove_html: remove_html,
+                            break_parsing: break_parsing,
+                            pattern_type: pattern_type
+                        }, function (data) {
 
 
+                            $('#modalInfo').modal('show')
+                            $('#modal-content').html(data.message);
 
-                    });
+                        });
+                    }
+
+
 
                 }
             });
@@ -195,18 +241,27 @@
                             <h3 class="panel-title">CONFIG FIELD</h3>
                         </div>
                         <div class="panel-body">
-                            <form action="#" method="post" role="form">
+                            <form action="#" method="post" role="form" id="form-config-field">
+                                <div class="form-group">
+                                    <label>PATTERN TYPE</label>
+                                    <label> <input type="radio" id="pattern_type" name="pattern_type" value="STRING_BETWEEN" checked> STRING BETWEEN </label>
+                                    <label> <input type="radio" id="pattern_type" name="pattern_type" value="XPATH"> XPATH </label>
+                                </div>
                                 <div class="form-group">
                                     <label>FIELD NAME</label>
                                     <input type="text" class="form-control input-lg" name="field-name" id="field-name">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="startstring">
                                     <label>START STRING</label>
                                     <textarea class="form-control" name="start-string" id="start-string" rows="5" spellcheck="false"></textarea>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="endstring">
                                     <label>END STRING</label>
                                     <textarea class="form-control" name="end-string" id="end-string" rows="5" spellcheck="false"></textarea>
+                                </div>
+                                <div class="form-group" id="xpathconfig" style="display:none;">
+                                    <label>XPATH CONFIG</label>
+                                    <input type="text" class="form-control input-lg" name="xpath-config" id="xpath-config">
                                 </div>
                                 <div class="form-group">
                                     <label>RESULT</label>

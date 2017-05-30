@@ -7,6 +7,7 @@ from foundation.dataservice import project_impl, source_impl, configuration_impl
 import requests
 from lxml import etree, html
 import urllib2
+from io import StringIO
 
 
 
@@ -206,9 +207,6 @@ def config_general(sid):
 def config_link(sid):
     return render_template('source/config/link.html', sid=sid)
 
-
-
-
 from bs4 import BeautifulSoup
 @source.route('/config/link', methods=['GET', 'POST'])
 @login_required
@@ -235,17 +233,26 @@ def config_link_check_url_match():
     try:
         url = request.form['url']
         urlregex = request.form['urlregex']
+        pattern_type = request.form['pattern_type']
         item = []
-        response = requests.get(url)
-        if response.status_code == 200:
+
+
+        if pattern_type == 'REGEX':
+            response = requests.get(url)
             soup = BeautifulSoup(response.text)
             links = soup.find_all('a')
             for link in links:
                 href = link.get('href')
-                if href: # if not null
+                if href:  # if not null
                     objMatch = re.match(urlregex, href, flags=0)
                     if objMatch:
                         item.append(href)
+        elif pattern_type == 'XPATH': #Xpath
+            response = urllib2.urlopen(url)
+            htmlparser = etree.HTMLParser()
+            tree = etree.parse(response, htmlparser)
+            item = tree.xpath(urlregex)
+
         return jsonify({'links': item})
     except Exception as ex:
         flash('#ERROR:' + str(ex))
@@ -346,6 +353,27 @@ def config_parser(sid):
     return render_template('source/config/parser.html', sid=sid)
 
 
+@source.route('/config/field/test/xpath', methods=['GET', 'POST'])
+def config_field_test_xpath():
+    try:
+        url = request.form['url']
+        xpath = request.form['xpath']
+
+        response = urllib2.urlopen(url)
+        htmlparser = etree.HTMLParser()
+
+        tree = etree.parse(response, htmlparser)
+
+        data = tree.xpath(xpath)
+
+        data = etree.tostring(data[0], pretty_print=True)
+
+        return jsonify({'status': 1, 'text': data})
+
+    except Exception as ex:
+        return jsonify({'status': -1, 'text': ex})
+
+
 @source.route('/config/field/add', methods=['GET', 'POST'])
 @login_required
 def config_field_add():
@@ -353,56 +381,103 @@ def config_field_add():
         is_update = False
         sid = request.form['sid']
         c = configuration_impl.get_config('SOURCE', sid)
+        pattern_type = request.form['pattern_type']
 
-        field_name = request.form['field_name']
-        start_pattern = request.form['start_pattern']
-        end_pattern = request.form['end_pattern']
-        remove_html = request.form['remove_html']
-        break_parsing = request.form['break_parsing']
-
-        try:
-            if c and c.config['PARSERFIELDS']['data']:
-                is_update = True
-        except:
-            is_update = False
-
-
-
-        if is_update:
+        if pattern_type == 'STRING_BETWEEN':
+            #---------------------- REGEX ------------------------------------------------------------------------------
+            field_name = request.form['field_name']
+            start_pattern = request.form['start_pattern']
+            end_pattern = request.form['end_pattern']
+            remove_html = request.form['remove_html']
+            break_parsing = request.form['break_parsing']
 
             try:
-                key_number = len(c.config['PARSERFIELDS']['data'][field_name]['step']) + 1
-            except Exception as _error:
-                key_number = 1
+                if c and c.config['PARSERFIELDS']['data']:
+                    is_update = True
+            except:
+                is_update = False
+            if is_update:
 
+                try:
+                    key_number = len(c.config['PARSERFIELDS']['data'][field_name]['step']) + 1
+                except Exception as _error:
+                    key_number = 1
 
-            if key_number > 1:
-                c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
-                c.config['PARSERFIELDS']['data'][field_name]['step'][str(key_number)] = dict(
-                                    start_pattern=str(start_pattern),
-                                    end_pattern=str(end_pattern),
-                                    remove_html=str(remove_html),
-                                    break_parsing=str(break_parsing))
+                if key_number > 1:
+                    c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
+                    c.config['PARSERFIELDS']['data'][field_name]['step'][str(key_number)] = dict(
+                        start_pattern=str(start_pattern),
+                        end_pattern=str(end_pattern),
+                        remove_html=str(remove_html),
+                        break_parsing=str(break_parsing))
+                else:
+                    c.config[u'PARSERFIELDS']['data'][str(field_name)] = dict(pattern_type=u'STRING_BETWEEN',
+                                                                              step={str(key_number): dict(
+                                                                                  start_pattern=str(start_pattern),
+                                                                                  end_pattern=str(end_pattern),
+                                                                                  remove_html=str(remove_html),
+                                                                                  break_parsing=str(break_parsing))})
+
+                if configuration_impl.update('SOURCE', sid, c.config):
+                    return jsonify({'status': 1, 'message': 'Save Config Field Successfull'})
             else:
-                c.config[u'PARSERFIELDS']['data'][str(field_name)] = dict(pattern_type=u'STRING_BETWEEN',
-                                              step={str(key_number): dict(start_pattern=str(start_pattern),
-                                                                          end_pattern=str(end_pattern),
-                                                                          remove_html=str(remove_html),
-                                                                          break_parsing=str(break_parsing))})
 
-            if configuration_impl.update('SOURCE', sid, c.config):
-                return jsonify({'status': 1, 'message': 'Save Config Field Successfull'})
-        else:
+                c.config[u'PARSERFIELDS'] = dict(
+                    data={str(field_name): dict(pattern_type=u'STRING_BETWEEN',
+                                                step={u'1': dict(start_pattern=str(start_pattern),
+                                                                 end_pattern=str(end_pattern),
+                                                                 remove_html=str(remove_html),
+                                                                 break_parsing=str(break_parsing))}
+                                                )})
+                if configuration_impl.update('SOURCE', sid, c.config):
+                    return jsonify({'status': 1, 'message': 'Save Config Field Successfull'})
+            #-----------------------------------------------------------------------------------------------------------
+        else: #XPATH
+            # ---------------------- XPATH ------------------------------------------------------------------------------
+            field_name = request.form['field_name']
+            xpath = request.form['xpath']
+            remove_html = request.form['remove_html']
+            break_parsing = request.form['break_parsing']
 
-            c.config[u'PARSERFIELDS'] = dict(
-                data={str(field_name): dict(pattern_type=u'STRING_BETWEEN',
-                                     step={u'1': dict(start_pattern=str(start_pattern),
-                                                      end_pattern=str(end_pattern),
-                                                      remove_html=str(remove_html),
-                                                      break_parsing=str(break_parsing))}
-                                     )})
-            if configuration_impl.update('SOURCE', sid, c.config):
-                return jsonify({'status': 1, 'message': 'Save Config Field Successfull'})
+            try:
+                if c and c.config['PARSERFIELDS']['data']:
+                    is_update = True
+            except:
+                is_update = False
+            if is_update:
+
+                try:
+                    key_number = len(c.config['PARSERFIELDS']['data'][field_name]['step']) + 1
+                except Exception as _error:
+                    key_number = 1
+
+                if key_number > 1:
+                    c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'XPATH'
+                    c.config['PARSERFIELDS']['data'][field_name]['step'][str(key_number)] = dict(
+                        xpath=str(xpath),
+                        remove_html=str(remove_html),
+                        break_parsing=str(break_parsing))
+                else:
+                    c.config[u'PARSERFIELDS']['data'][str(field_name)] = dict(pattern_type=u'XPATH',
+                                                                              step={str(key_number): dict(
+                                                                                  xpath=str(xpath),
+                                                                                  remove_html=str(remove_html),
+                                                                                  break_parsing=str(break_parsing))})
+
+                if configuration_impl.update('SOURCE', sid, c.config):
+                    return jsonify({'status': 1, 'message': 'Save Config Field Successfull'})
+            else:
+
+                c.config[u'PARSERFIELDS'] = dict(
+                    data={str(field_name): dict(pattern_type=u'XPATH',
+                                                step={u'1': dict(xpath=str(xpath),
+                                                                 remove_html=str(remove_html),
+                                                                 break_parsing=str(break_parsing))}
+                                                )})
+                if configuration_impl.update('SOURCE', sid, c.config):
+                    return jsonify({'status': 1, 'message': 'Save Config Field Successfull'})
+                    # -----------------------------------------------------------------------------------------------------------
+
     except Exception as ex:
         return jsonify({'status': -1, 'message': ex.message})
 

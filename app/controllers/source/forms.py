@@ -23,7 +23,8 @@ class SourceForm(Form):
 
     type_spider = SelectField(u'TYPE SPIDER', choices=[
         (u'Default', u'DEFAULT'),
-        (u'Archivied', u'ARCHIVIED')
+        (u'Archivied', u'ARCHIVIED'),
+        (u'Customize', u'CUSTOMIZE')
     ])
 
     #project = SelectField(u'SELECT PROJECT', choices=[(str(p.id), p.name) for p in project_impl.get_all()])

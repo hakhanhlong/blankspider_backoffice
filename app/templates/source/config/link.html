@@ -61,7 +61,8 @@
                     var beginURL = $('#txtBeginLink').val();
                     $.post('{{url_for('source.config_link_check_url_match')}}', {
                         urlregex: $('#url_pattern').val(),
-                        url: $('#txtBeginLink').val()
+                        url: $('#txtBeginLink').val(),
+                        pattern_type: $('input[name=pattern_type]:checked').val()
                     }, function (data) {
 
                         $('#spanMatchLink').html(data.links.length);
@@ -85,7 +86,7 @@
                     $.post('{{url_for('source.config_link_add')}}', {
                         sid: $('#txt_hidden_sid').val(),
                         url_pattern: $('#url_pattern').val(),
-                        pattern_type: $('#pattern_type').val(),
+                        pattern_type: $('input[name=pattern_type]:checked').val(),
                         link_type: $('input[name=link_type]:checked').val()
                     }, function (data) {
 
@@ -184,7 +185,8 @@
                         </div>
                          <div>
                              <div class="radio">
-                                 <label> <input type="radio" id="pattern_type" name="pattern_type" value="REGEX" checked> REGEX PATTERN </label>
+                                 <label> <input type="radio" id="pattern_type" name="pattern_type" value="REGEX"> REGEX PATTERN </label>
+                                 <label> <input type="radio" id="pattern_type" name="pattern_type" value="XPATH"> XPATH PATTERN </label>
                              </div>
                               <label class="radio-inline">
                                 <input type="radio" class="link_type" name="link_type" value="BEGIN_LINK" checked>
