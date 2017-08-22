@@ -6,7 +6,6 @@ from flask.ext.login import current_user, login_required
 from foundation.dataservice import project_impl, source_impl, configuration_impl
 import requests
 from lxml import etree, html
-import urllib2
 from io import StringIO
 
 
