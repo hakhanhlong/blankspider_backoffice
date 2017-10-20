@@ -75,11 +75,19 @@
                          return;
                     }
 
+                    var url_video_cache = 0;
+                    if($('#chkURLVideoCache').is(':checked')){
+                        url_video_cache = 1;
+                    }
+
+
 
                     $.post('{{url_for('source.config_video_add')}}', {
                         sid: $('#txt_hidden_sid').val(),
                         field_name: $('#field-name').val(),
-                        field_value: $('#field-value').val()
+                        field_value: $('#field-value').val(),
+                        is_url_video_cache: url_video_cache
+
                     }, function (data) {
 
 
@@ -216,6 +224,13 @@
                                 <div class="form-group">
                                     <label>RESULT</label>
                                     <textarea name="txtResult" id="txtResult" class="form-control" rows="10" spellcheck="false"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" id="chkURLVideoCache" name="chkURLVideoCache" value="1"/>URL Video Cache?
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                      <label>ACTIONS</label>

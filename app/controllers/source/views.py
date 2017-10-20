@@ -583,6 +583,7 @@ def config_video_add():
 
         field_name = request.form['field_name']
         field_value = request.form['field_value']
+        is_url_video_cache = request.form['is_url_video_cache']
 
         try:
             if c and c.config['PARSERVIDEOS']['data']:
@@ -603,10 +604,12 @@ def config_video_add():
             if key_number > 1:
                 c.config['PARSERVIDEOS']['data'][field_name]['pattern_type'] = u'XPATH'
                 c.config['PARSERVIDEOS']['data'][field_name]['step'][str(key_number)] = dict(
-                                    field_value=str(field_value))
+                                    field_value=str(field_value),
+                                    is_url_video_cache=is_url_video_cache)
             else:
                 c.config['PARSERVIDEOS']['data'][str(field_name)] = dict(pattern_type=u'XPATH',
-                                              step={str(key_number): dict(field_value=str(field_value))})
+                                              step={str(key_number): dict(field_value=str(field_value),
+                                                                          is_url_video_cache=is_url_video_cache)})
 
             if configuration_impl.update('SOURCE', sid, c.config):
                 return jsonify({'status': 1, 'message': 'Save Config Video Successfull'})
@@ -614,7 +617,8 @@ def config_video_add():
 
             c.config['PARSERVIDEOS'] = dict(
                 data={str(field_name): dict(pattern_type=u'XPATH',
-                                     step={'1': dict(field_value=str(field_value))})})
+                                     step={'1': dict(field_value=str(field_value),
+                                                     is_url_video_cache=is_url_video_cache)})})
             if configuration_impl.update('SOURCE', sid, c.config):
                 return jsonify({'status': 1, 'message': 'Save Config Videos Successfull'})
     except Exception as ex:
