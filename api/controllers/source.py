@@ -47,7 +47,8 @@ class API_SOURCE_CONFIG(Resource):
                 thread_sleep=c.config['GENERALS']['thread_sleep'],
                 post_url=c.config['GENERALS']['post_url'],
                 thread_number_parsing=c.config['GENERALS']['thread_number_parsing'],
-                update_sleep=c.config['GENERALS']['update_sleep']
+                update_sleep=c.config['GENERALS']['update_sleep'],
+                video_base_url = c.config['GENERALS']['video_base_url']
             ))
 
         if key_config.upper() == 'PARSERLINKS':

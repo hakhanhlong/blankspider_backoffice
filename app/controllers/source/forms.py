@@ -34,6 +34,7 @@ class SourceForm(Form):
 
 class ConfigGeneralForm(Form):
     base_url = StringField(u'BASE URL', validators=[DataRequired()])
+    video_base_url = StringField(u'VIDEO BASE URL', default="http://#")
     thread_number = StringField(u'THREAD NUMBER FIND LINK', default='1', validators=[DataRequired()])
     thread_number_parsing = StringField(u'THREAD NUMBER PARSING', default='1', validators=[DataRequired()])
     thread_sleep = StringField(u'THREAD SLEEP', default='200', validators=[DataRequired()])

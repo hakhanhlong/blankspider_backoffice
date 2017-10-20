@@ -148,12 +148,11 @@ def config_general(sid):
             form.thread_sleep.data = c.config['GENERALS']['thread_sleep']
             form.max_trying_count.data = c.config['GENERALS']['max_trying_count']
 
-
-
             try:
                 form.thread_number_parsing.data = c.config['GENERALS']['thread_number_parsing']
                 form.update_sleep.data = c.config['GENERALS']['update_sleep']
                 form.post_url.data = c.config['GENERALS']['post_url']
+                form.video_base_url.data = c.config['GENERALS']['video_base_url']
             except:
                 pass
 
@@ -168,7 +167,8 @@ def config_general(sid):
                     max_trying_count=form.max_trying_count.data,
                     post_url = form.post_url.data,
                     thread_number_parsing = form.thread_number_parsing.data,
-                    update_sleep = form.update_sleep.data
+                    update_sleep = form.update_sleep.data,
+                    video_base_url = form.video_base_url.data
 
                 ))
                 if configuration_impl.insert('SOURCE', sid, config):
@@ -182,7 +182,8 @@ def config_general(sid):
                     max_trying_count=form.max_trying_count.data,
                     post_url=form.post_url.data,
                     thread_number_parsing = form.thread_number_parsing.data,
-                    update_sleep = form.update_sleep.data
+                    update_sleep = form.update_sleep.data,
+                    video_base_url=form.video_base_url.data
                 )
                 if configuration_impl.update('SOURCE', sid, c.config):
                     flash('#INFO: UPDATE CONFIG SOURCE SUCCESSFULL', 'info')
