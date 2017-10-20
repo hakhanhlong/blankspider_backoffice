@@ -15,7 +15,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/BLANKSPIDER_MANAGEMENT$manage.coverage" NAME="manage Coverage Results" MODIFIED="1508479142805" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BLANKSPIDER_MANAGEMENT$manage.coverage" NAME="manage Coverage Results" MODIFIED="1508484863196" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -29,8 +29,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/controllers/source/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="540" column="38" lean-forward="true" selection-start-line="540" selection-start-column="38" selection-end-line="540" selection-end-column="38" />
+            <state relative-caret-position="270">
+              <caret line="549" column="31" lean-forward="true" selection-start-line="549" selection-start-column="31" selection-end-line="549" selection-end-column="31" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -599,13 +599,6 @@
       <option name="presentableId" value="Default" />
       <updated>1453198648224</updated>
     </task>
-    <task id="LOCAL-00004" summary="add package database">
-      <created>1453463740741</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1453463740741</updated>
-    </task>
     <task id="LOCAL-00005" summary="auth login">
       <created>1453560711262</created>
       <option name="number" value="00005" />
@@ -942,7 +935,14 @@
       <option name="project" value="LOCAL" />
       <updated>1503380876337</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="edit source commit">
+      <created>1508479206639</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1508479206640</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1012,7 +1012,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="77" />
+      <option name="time" value="78" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1329,8 +1329,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/source/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="540" column="38" lean-forward="true" selection-start-line="540" selection-start-column="38" selection-end-line="540" selection-end-column="38" />
+        <state relative-caret-position="270">
+          <caret line="549" column="31" lean-forward="true" selection-start-line="549" selection-start-column="31" selection-end-line="549" selection-end-column="31" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>

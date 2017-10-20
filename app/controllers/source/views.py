@@ -540,8 +540,14 @@ def video_request_test():
         tree = etree.parse(response, htmlparser)
         data = tree.xpath(field_value)
         result = []
-        for x in data:
-            result.append(etree.tostring(x, pretty_print=True))
+
+        try:
+            for x in data:
+                result.append(etree.tostring(x, pretty_print=True))
+        except:
+            #value only string
+            for x in data:
+                result.append(x)
 
         return jsonify({'result': ''.join(result)})
 
