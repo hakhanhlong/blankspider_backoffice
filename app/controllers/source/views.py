@@ -6,9 +6,7 @@ from flask.ext.login import current_user, login_required
 from foundation.dataservice import project_impl, source_impl, configuration_impl
 import requests
 from lxml import etree, html
-from io import StringIO
-
-
+import urllib2
 
 
 
@@ -548,7 +546,6 @@ def video_request_test():
         return jsonify({'result': ''.join(result)})
 
     except Exception as ex:
-        flash('#ERROR:' + ex)
         return jsonify({'result': "ERROR", 'url': url,
                         'field_value':field_value})
 
