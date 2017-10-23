@@ -69,6 +69,21 @@
                             <label>POST URL</label>
                             {{form['post_url'](class='form-control', placeholder='INPUT POST URL ...')}}
                         </div>
+                         <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    {{form['chk_unique_css']}} Unique Stylesheet?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>FILTER PDF BY</label>
+                           {{form['filter_pdf'](class='form-control', placeholder='Input stylesheet for filter pdf ...')}}
+                        </div>
+                         <div class="form-group">
+                            <label>REMOVE FILTER PDF BY</label>
+                           {{form['remove_filter_pdf'](class='form-control', placeholder='Input stylesheet for remove filter pdf ...')}}
+                        </div>
 
                         <div class="pull-right">
                             <button type="submit" class="btn btn-primary">Submit</button>
