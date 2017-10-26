@@ -412,8 +412,8 @@ def config_field_add():
                 if key_number > 1:
                     c.config['PARSERFIELDS']['data'][field_name]['pattern_type'] = u'STRING_BETWEEN'
                     c.config['PARSERFIELDS']['data'][field_name]['step'][str(key_number)] = dict(
-                        start_pattern=str(start_pattern),
-                        end_pattern=str(end_pattern),
+                        start_pattern=str(start_pattern.decode('utf-8')),
+                        end_pattern=str(end_pattern.decode('utf-8')),
                         remove_html=str(remove_html),
                         break_parsing=str(break_parsing))
                 else:
