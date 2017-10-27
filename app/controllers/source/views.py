@@ -368,11 +368,17 @@ def config_field_test_xpath():
         response = urllib2.urlopen(url)
         htmlparser = etree.HTMLParser()
 
+
+
         tree = etree.parse(response, htmlparser)
 
-        data = tree.xpath(xpath)
+        data_response = tree.xpath(xpath)
 
-        data = etree.tostring(data[0], pretty_print=True)
+        try:
+            data = etree.tostring(data_response[0], pretty_print=True)
+        except:
+            data = data_response[0]
+
 
         return jsonify({'status': 1, 'text': data})
 
