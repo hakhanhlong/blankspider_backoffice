@@ -1,6 +1,9 @@
 from . import source
 from .forms import SourceForm, ConfigGeneralForm
 
+import lxml
+
+
 from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask.ext.login import current_user, login_required
 from foundation.dataservice import project_impl, source_impl, configuration_impl
@@ -254,10 +257,22 @@ def config_link_check_url_match():
                     if objMatch:
                         item.append(href)
         elif pattern_type == 'XPATH': #Xpath
-            response = urllib2.urlopen(url)
+
+            '''response = urllib2.urlopen(url)
             htmlparser = etree.HTMLParser()
             tree = etree.parse(response, htmlparser)
-            item = tree.xpath(urlregex)
+            item = tree.xpath(urlregex)'''
+
+            #response = urllib2.urlopen(url)
+            #docs = lh.parse(urllib2.urlopen(url))
+
+            html = requests.get(url)
+            docs = lxml.html.fromstring(html.content)
+            item = docs.xpath(urlregex)
+
+
+
+
 
         return jsonify({'links': item})
     except Exception as ex:
@@ -365,21 +380,18 @@ def config_field_test_xpath():
         url = request.form['url']
         xpath = request.form['xpath']
 
-        response = urllib2.urlopen(url)
+        '''response = urllib2.urlopen(url)
         htmlparser = etree.HTMLParser()
-
-
-
         tree = etree.parse(response, htmlparser)
-
         data_response = tree.xpath(xpath)
-
         try:
             data = etree.tostring(data_response[0], pretty_print=True)
         except:
-            data = data_response[0]
+            data = data_response[0]'''
 
-
+        html = requests.get(url)
+        docs = lxml.html.fromstring(html.content)
+        data = docs.xpath(xpath)[0]
         return jsonify({'status': 1, 'text': data})
 
     except Exception as ex:
@@ -550,10 +562,13 @@ def video_request_test():
         url = request.form['txtBeginLink']
         field_value = request.form['field_value']
 
-        response = urllib2.urlopen(url)
+        '''response = urllib2.urlopen(url)
         htmlparser = etree.HTMLParser()
-        tree = etree.parse(response, htmlparser)
-        data = tree.xpath(field_value)
+        tree = etree.parse(response, htmlparser)'''
+
+        html = requests.get(url)
+        docs = lxml.html.fromstring(html.content)
+        data = docs.xpath(field_value)
         result = []
 
         try:
