@@ -42,6 +42,8 @@ class ConfigGeneralForm(Form):
     max_trying_count = StringField(u'MAX TRYING COUNT', default='100', validators=[DataRequired()])
     post_url = StringField(u'POST URL', default="http://0.0.0.0")
 
+    video_post_url = StringField(u'VIDEO POST URL', default="http://0.0.0.0")
+
     chk_unique_css = BooleanField(u'Unique Stylesheet?', default=0)
     filter_pdf = StringField(u'FILTER PDF BY')
     remove_filter_pdf = StringField(u'REMOVE FILTER PDF BY')

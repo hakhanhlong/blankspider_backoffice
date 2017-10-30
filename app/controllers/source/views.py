@@ -159,6 +159,7 @@ def config_general(sid):
                 form.chk_unique_css.data = c.config['GENERALS']['chk_unique_css']
                 form.filter_pdf.data = c.config['GENERALS']['filter_pdf']
                 form.remove_filter_pdf.data = c.config['GENERALS']['remove_filter_pdf']
+                form.video_post_url.data = c.config['GENERALS']['video_post_url']
             except:
                 pass
 
@@ -177,7 +178,8 @@ def config_general(sid):
                     video_base_url = form.video_base_url.data,
                     chk_unique_css = form.chk_unique_css.data,
                     filter_pdf = form.filter_pdf.data,
-                    remove_filter_pdf = form.remove_filter_pdf.data
+                    remove_filter_pdf = form.remove_filter_pdf.data,
+                    video_post_url = form.video_post_url.data
                 ))
                 if configuration_impl.insert('SOURCE', sid, config):
                     flash('#INFO: INSERT CONFIG SOURCE SUCCESSFULL', 'info')
@@ -194,7 +196,8 @@ def config_general(sid):
                     video_base_url=form.video_base_url.data,
                     chk_unique_css = form.chk_unique_css.data,
                     filter_pdf = form.filter_pdf.data,
-                    remove_filter_pdf = form.remove_filter_pdf.data
+                    remove_filter_pdf = form.remove_filter_pdf.data,
+                    video_post_url=form.video_post_url.data
                 )
                 if configuration_impl.update('SOURCE', sid, c.config):
                     flash('#INFO: UPDATE CONFIG SOURCE SUCCESSFULL', 'info')

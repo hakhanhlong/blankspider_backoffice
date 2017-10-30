@@ -51,7 +51,8 @@ class API_SOURCE_CONFIG(Resource):
                 video_base_url = c.config['GENERALS']['video_base_url'],
                 chk_unique_css=c.config['GENERALS']['chk_unique_css'],
                 filter_pdf=c.config['GENERALS']['filter_pdf'],
-                remove_filter_pdf=c.config['GENERALS']['remove_filter_pdf']
+                remove_filter_pdf=c.config['GENERALS']['remove_filter_pdf'],
+                video_post_url = c.config['GENERALS']['video_post_url']
             ))
 
         if key_config.upper() == 'PARSERLINKS':
