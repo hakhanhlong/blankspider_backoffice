@@ -395,6 +395,7 @@ def config_field_test_xpath():
         html = requests.get(url)
         docs = lxml.html.fromstring(html.content)
         data = docs.xpath(xpath)[0]
+
         return jsonify({'status': 1, 'text': data})
 
     except Exception as ex:
