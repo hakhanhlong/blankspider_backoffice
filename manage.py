@@ -22,6 +22,7 @@ class createadmin(Command):
 
 
 app = create_app(os.getenv('BLANKSPIDER_EVR') or 'default')
+
 manager = Manager(app)
 
 manager.add_command('runserver', Server(

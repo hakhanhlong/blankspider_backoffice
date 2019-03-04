@@ -49,7 +49,7 @@ def create_app(config_name):
         'flask_debugtoolbar.panels.logger.LoggingPanel',
         'flask_debugtoolbar.panels.profiler.ProfilerDebugPanel',
         # Add the MongoDB panel
-        'flask.ext.mongoengine.panels.MongoDebugPanel',
+        #'flask.ext.mongoengine.panels.MongoDebugPanel',
     ]
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
