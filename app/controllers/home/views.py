@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from flask import render_template, flash, redirect, url_for, request
-from flask.ext.login import current_user, login_required
+from flask_login import current_user, login_required
 
 from . import home
 

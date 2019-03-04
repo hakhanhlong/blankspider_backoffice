@@ -5,7 +5,7 @@ import lxml
 
 
 from flask import render_template, redirect, url_for, request, flash, jsonify
-from flask.ext.login import current_user, login_required
+from flask_login import current_user, login_required
 from foundation.dataservice import project_impl, source_impl, configuration_impl
 import requests
 from lxml import etree, html

@@ -1,5 +1,5 @@
 from app import create_app
-from flask.ext.script import Manager, Shell, Server, Command, Option
+from flask_script import Manager, Shell, Server, Command, Option
 import os
 
 

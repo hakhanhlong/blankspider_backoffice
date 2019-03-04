@@ -2,7 +2,7 @@ from . import project
 from .forms import AddForm, EditForm
 
 from flask import render_template, redirect, request, url_for, flash
-from flask.ext.login import login_required, current_user
+from flask_login import login_required, current_user
 from foundation.dataservice import project_impl
 
 @project.route('/', methods=['GET'])
