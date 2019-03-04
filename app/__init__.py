@@ -21,8 +21,8 @@ def create_app(config_name):
         'db': config[config_name].MONGO_DATABASE_NAME,
         'host': config[config_name].MONGO_DATABASE_SERVER,
         'port': config[config_name].MONGO_DATABASE_PORT,
-        'username': 'longhk',
-        'password': 'abc@123#@!'
+        #'username': 'longhk',
+        #'password': 'abc@123#@!'
 
     }
 
